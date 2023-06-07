@@ -2,7 +2,7 @@ const expresse = require("express");
 const router = expresse.Router();
 const ctrl = require("../../controllers/auth");
 const validateBody = require("../../middlewares/validateBody");
-const authanticate = require("../../middlewares/authanticate");
+const authenticate = require("../../middlewares/authenticate");
 
 const { schemas } = require("../../models/user");
 
@@ -13,6 +13,12 @@ router.post(
 );
 router.post("/users/login", validateBody(schemas.loginSchema), ctrl.login);
 
-router.post("/users/logout", authanticate, ctrl.logout);
-router.get("/users/current", authanticate, ctrl.getCurrent);
+router.post("/users/logout", authenticate, ctrl.logout);
+router.get("/users/current", authenticate, ctrl.getCurrent);
+router.patch(
+  "/users",
+  authenticate,
+  validateBody(schemas.updateSubscriptionSchema),
+  ctrl.updateSubscription
+);
 module.exports = router;
